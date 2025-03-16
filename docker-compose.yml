@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql1
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - app_network
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_URL=jdbc:mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/mysql?serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    networks:
+      - app_network
+
+# -----------------------------
+# 추가: nGrinder Controller
+# -----------------------------
+# ngrinder-controller:
+#   container_name: ngrinder-controller
+#   image: ngrinder/controller:latest
+#   # Controller UI에 접근할 포트들을 매핑합니다.
+#   ports:
+#     - "80:80"         # 웹 UI
+#     - "12000:12000"   # 에이전트 연결 포트
+#   environment:
+#     - TZ=Asia/Seoul
+#   networks:
+#     app_network:
+#       aliases:
+#         - controller  # 이 alias를 추가하여 agent가 "controller"로 접근 가능하도록 함
+#   # 꼭 필요한 것은 아니지만, 백엔드가 먼저 올라온 뒤
+#   # nGrinder를 띄우고 싶다면 depends_on으로 backend를 지정 가능
+#   depends_on:
+#     - backend
+
+# -----------------------------
+# 추가: nGrinder Agent
+# -----------------------------
+# ngrinder-agent:
+#   container_name: ngrinder-agent
+#   image: ngrinder/agent:latest
+#   environment:
+#     # 컨트롤러의 호스트명을 services의 key "ngrinder-controller"로 지정
+#     - CONTROLLER_IP=ngrinder-controller
+#     - TZ=Asia/Seoul
+#   depends_on:
+#     - ngrinder-controller
+#   networks:
+#     - app_network
+
+networks:
+  app_network:
+    driver: bridge

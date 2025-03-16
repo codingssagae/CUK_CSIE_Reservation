@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - .env.prod
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_URL=jdbc:mysql://${RDS_ENDPOINT}/csieReserveDB?serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      - SPRING_PROFILES_ACTIVE=prod
+      - COOLSMS_API_KEY=${COOLSMS_API_KEY}
+      - COOLSMS_API_SECRET=${COOLSMS_API_SECRET}
+    networks:
+      - app_network
+    depends_on:
+      redis:
+        condition: service_started
+
+networks:
+  app_network:
+    driver: bridge
