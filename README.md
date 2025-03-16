@@ -1,6 +1,6 @@
-# CSIE Space Reservation System
+# 가톨릭대학교 컴퓨터정보공학부 회의실 예약 시스템
 
-## 🛠 개발 담당한 기능
+## 🛠 개발한 기능
 ### 1️⃣ FAQ 관리 (CRUD)
 - 자주 묻는 질문(FAQ)을 등록, 조회, 수정, 삭제 가능
 
@@ -16,7 +16,7 @@
 - 예약 확정 문자 자동 발송
 - 예약 10분 전 알림 문자 자동 발송
 - 기존 `@Scheduled` 대신 Quartz Scheduler를 사용하여 비동기적 스케줄링 처리  
-  - [블로그: @Scheduled과 Quartz 스케줄링 (문자 자동 발송 구현)](https://blog.naver.com/qjwlfk_/223730949560)
+  - 📌 [@Scheduled과 Quartz 스케쥴링 (문자 자동 발송 구현)](https://blog.naver.com/qjwlfk_/223730949560)
 
 ### 5️⃣ 예약 데이터 유지 및 성능 최적화
 - Quartz Scheduler + MySQL 연동  
@@ -59,12 +59,14 @@
 
 ---
 
-## 💡 추가 고려 사항
-- Redis 컨테이너 제거 (불필요한 리소스 사용 방지)
-- API 응답 방식 개선 필요
-  - 현재 일부 `POST` 요청에서 데이터를 조회하는 방식이 적절한지 검토 필요
-- 장기적으로 무중단 배포 고려
-  - 현재는 `docker-compose down & build` 방식으로 운영
+## 🛠 관련 기술 문제 해결 및 성능 개선 블로그
+### 1️⃣ Session 방식 로그인 문제 해결
+- 📌 [Session 방식 로그인의 iOS 서드파티 쿠키 문제(Safari ITP)](https://blog.naver.com/qjwlfk_/223790157592)
+- 📌 [Session 방식 로그인 Samesite 쿠키 설정 이슈](https://blog.naver.com/qjwlfk_/223790105304)
+
+### 2️⃣ 성능 최적화 및 유지보수 고려 사항
+- 📌 [성능 및 유지 보수를 위해 개발 중 신경 쓴 것들 (1)](https://blog.naver.com/qjwlfk_/223740203735)
+- 📌 [성능 및 유지 보수를 위해 신경 쓴 것들 (2)](https://blog.naver.com/qjwlfk_/223740216071)
 
 ---
 
