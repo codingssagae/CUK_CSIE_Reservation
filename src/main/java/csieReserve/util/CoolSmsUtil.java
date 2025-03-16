@@ -13,9 +13,6 @@ import org.springframework.stereotype.Component;
 public class CoolSmsUtil {
 
 
-    private final String apiKey = "NCSR4XZHFG3PREFM";
-
-    private final String apiSecret = "BNPAQSN1SI3MD4FYDOPX2SCUOS7CBHYC";
 
     @Value("${coolsms.from.number}") // 발신자 번호 주입
     private String fromNumber;
@@ -30,7 +27,6 @@ public class CoolSmsUtil {
     // 단일 메시지 발송
     public void sendSMS(String to, String msg){
         Message message = new Message(); // 새 메시지 객체 생성
-        message.setFrom("01071430417"); // 발신자 번호 설정
         message.setTo(to); // 수신자 번호 설정
         message.setText(msg); // 메시지 내용 설정
 
@@ -39,7 +35,6 @@ public class CoolSmsUtil {
 
     public void sendLMS(String to, String msg) {
         Message message = new Message();
-        message.setFrom("01071430417"); // 발신자 번호
         message.setTo(to); // 수신자 번호
         message.setText(msg); // 메시지 내용
         message.setSubject("[회의실 예약 취소 안내]");

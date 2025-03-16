@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class RandomPasswordGenerator {
 
-    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "";
 
     public static String generatePassword(int length) {
         Random random = new Random();

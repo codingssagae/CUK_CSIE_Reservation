@@ -18,8 +18,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         List<Server> servers = new ArrayList<>();
-        servers.add(new Server().url("https://csiereserve.store").description("Production Server")); // 배포 서버
-        servers.add(new Server().url("http://localhost:8080").description("Local Server"));          // 로컬 서버
+
 
         return new OpenAPI()
                 .components(new Components()
