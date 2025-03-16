@@ -77,4 +77,4 @@
 - Quartz Scheduler
 - Docker, EC2, Nginx
 - Swagger (API 문서 자동화)
-- GitHub Actions (CI/CD 자동화 예정)
+- GitHub Actions (CI/CD)
